@@ -1,0 +1,6 @@
+name: clase
+channels:
+  - defaults
+dependencies:
+  - python
+prefix: /home/dlopezg10/anaconda3/envs/clase
