@@ -1,4 +1,34 @@
-<h1>{{question.question_text}}</h1>
+<form action="{% url 'polls:vote' question.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>
+            <h1>
+                {{ question.question_text}}
+            </h1>
+            {% if error_mesage %}
+                <p><strong>
+                    {{error_mesage}}
+                </strong></p>
+            {% endif %}
+            {% for choice in question.choice_set.all  %}
+                <input 
+                    type="radio"
+                    name="choice"
+                    id="choice{{forloop.counter}}" {% comment %} me dice cual es el valor del contador actual  {% endcomment %}
+                    value={{choice.id}}
+                    >
+                <label for="choice{{forloop.counter}}">
+                    {{choice.choice_text}}
+                </label>
+                <br>
+            {% endfor %}
+        </legend>
+    </fieldset>
+    <input type="submit" value="Votar">
+</form>
+
+
+{% comment %} <h1>{{question.question_text}}</h1>
 
 <ul>
     {% for choice in question.choice_set.all  %}
@@ -6,4 +36,4 @@
         {{choice.choice_text}}
     </li>
     {% endfor %}
-</ul>
+</ul> {% endcomment %}
