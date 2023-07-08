@@ -1,0 +1,14 @@
+<h1>
+    Resultados preliminares de la pregunta:
+    <strong>
+        {{question.question_text}}
+    </strong> 
+</h1>
+<ul>
+    {% for choice in question.choice_set.all  %}
+        <li>
+            {{choice.choice_text}}: {{choice.votes}} voto{{choice.votes|pluralize}}
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'polls:index'%}">Votar por otra pregunta</a>
