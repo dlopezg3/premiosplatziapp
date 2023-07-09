@@ -55,7 +55,7 @@ ROOT_URLCONF = 'premiosplatziapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,10 +65,12 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'premiosplatziapp.wsgi.application'
+
+LOGIN_REDIRECT_URL = "/polls"
 
 
 # Database
