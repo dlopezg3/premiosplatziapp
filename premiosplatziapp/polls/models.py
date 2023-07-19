@@ -11,7 +11,7 @@ class Question(models.Model):
         return self.question_text # Cada que invoquemos el metodo queremos que nos muestre el texto de la pregunta
     
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1) # un time delta es un objeto que define diferencia de tiempo
+        return timezone.now() >= self.pub_date >= timezone.now() - datetime.timedelta(days=1) # un time delta es un objeto que define diferencia de tiempo
 
 
 class Choice(models.Model):
