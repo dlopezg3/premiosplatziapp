@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateField(auto_now_add=True)
+    pub_date = models.DateField()
 
     def __str__(self):
         return self.question_text # Cada que invoquemos el metodo queremos que nos muestre el texto de la pregunta

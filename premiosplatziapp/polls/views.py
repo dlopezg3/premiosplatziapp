@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
+
 from .models import Question, Choice
 
 class AboutView(TemplateView):
@@ -15,7 +16,7 @@ class IndexView(ListView):
 
     def get_queryset(self):
         # Return the last five published questions
-        return Question.objects.order_by("-pub_date")[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
     
 class DetailView(DetailView):
     model = Question
