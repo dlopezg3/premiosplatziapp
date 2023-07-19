@@ -41,6 +41,7 @@ class QuestionIndexViewTest(TestCase):
         self.assertQuerysetEqual(response.context["latest_question_list"], [])
 
     def test_no_future_questions(self):
+        """When only future questions show no questions"""
         time = timezone.now() + datetime.timedelta(days=30)
         Question(question_text="Prueba", pub_date = time).save()
 
@@ -49,7 +50,7 @@ class QuestionIndexViewTest(TestCase):
         self.assertQuerysetEqual(response.context["latest_question_list"], [])
 
     def test_show_recent_questions(self):
-        # self.question = Question(question_text="prueba")
+        """When recent questions available show recent questions"""
         time = timezone.now() - datetime.timedelta(hours=20)
         Question(question_text="Prueba", pub_date = time).save()
 
@@ -57,16 +58,39 @@ class QuestionIndexViewTest(TestCase):
         self.assertEqual(len(response.context["latest_question_list"]), 1)
 
     def test_show_recent_questions_only(self):
-        # self.question = Question(question_text="prueba")
+        """When future and recent available questions show only recent questions"""
         time = timezone.now() - datetime.timedelta(hours=20)
-        Question(question_text="recent", pub_date = time).save()
+        past_question = Question(question_text="recent", pub_date = time)
+        past_question.save()
 
         time = timezone.now() + datetime.timedelta(hours=20)
         Question(question_text="future", pub_date = time).save()
 
         response = self.client.get(reverse("polls:index"))
-        self.assertEqual(len(response.context["latest_question_list"]), 1)
-        
+        self.assertQuerysetEqual(
+            response.context["latest_question_list"],
+            [past_question]
+        )
+
+    def test_two_recent_questions(self):
+        """Show more than one questions when recent questions are available"""
+        hours = [20, 10]
+        for ho in hours:
+            time = timezone.now() - datetime.timedelta(hours=ho)
+            Question(question_text="recent", pub_date = time).save()
+        response = self.client.get(reverse("polls:index"))
+        self.assertEqual(len(response.context["latest_question_list"]), 2)
+
+    def test_no_future_questions_more_than_1(self):
+        """When more than one future question show no questions"""
+        hours = [20, 10]
+        for ho in hours:
+            time = timezone.now() + datetime.timedelta(hours=ho)
+            Question(question_text="recent", pub_date = time).save()
+
+        response = self.client.get(reverse("polls:index"))
+        self.assertContains(response, "No existen preguntas disponibles")
+        self.assertQuerysetEqual(response.context["latest_question_list"], [])
 
 
 
