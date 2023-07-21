@@ -1,3 +1,5 @@
+from typing import Any
+from django.db import models
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect # Creación de la clase que permite ejecutar una respuesta http y el response redirect
 from django.utils import timezone
@@ -21,6 +23,10 @@ class IndexView(ListView):
 class DetailView(DetailView):
     model = Question
     template_name = "polls/detail.html"
+
+    def get_queryset(self):
+        """ Exclude questions with pub date in the future"""
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 class ResultsView(DetailView):
     model = Question

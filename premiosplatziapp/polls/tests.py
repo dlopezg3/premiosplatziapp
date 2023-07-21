@@ -93,5 +93,24 @@ class QuestionIndexViewTest(TestCase):
         self.assertQuerysetEqual(response.context["latest_question_list"], [])
 
 
+class QuestionDetailViewTest(TestCase):
+
+    def test_future_question(self):
+        """When question no published returns a 404 error not found"""
+        time = timezone.now() + datetime.timedelta(hours=20)
+        future_question = Question(question_text="recent", pub_date = time)
+        future_question.save()
+
+        response = self.client.get(reverse("polls:detail", args=(future_question.pk,))) #Importante la coma al final de args para indicar que es una tupla
+        self.assertEqual(response.status_code, 404)
 
 
+    def test_recent_question(self):
+        """The detail view of a question on the past returns the question detail view"""
+        time = timezone.now() - datetime.timedelta(hours=20)
+        past_question = Question(question_text="recent", pub_date = time)
+        past_question.save()
+
+        response = self.client.get(reverse("polls:detail", args=(past_question.pk,))) #Importante la coma al final de args para indicar que es una tupla
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, past_question.question_text)
