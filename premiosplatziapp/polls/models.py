@@ -1,11 +1,13 @@
 import datetime
+import pytz
 
 from django.db import models
 from django.utils import timezone
 
+
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateField()
+    pub_date = models.DateTimeField()
 
     def __str__(self):
         return self.question_text # Cada que invoquemos el metodo queremos que nos muestre el texto de la pregunta
