@@ -1,39 +1,42 @@
-<form action="{% url 'polls:vote' question.id %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend>
-            <h1>
-                {{ question.question_text}}
-            </h1>
-            {% if error_mesage %}
-                <p><strong>
-                    {{error_mesage}}
-                </strong></p>
-            {% endif %}
-            {% for choice in question.choice_set.all  %}
-                <input 
-                    type="radio"
-                    name="choice"
-                    id="choice{{forloop.counter}}" {% comment %} me dice cual es el valor del contador actual  {% endcomment %}
-                    value={{choice.id}}
-                    >
-                <label for="choice{{forloop.counter}}">
-                    {{choice.choice_text}}
-                </label>
-                <br>
-            {% endfor %}
-        </legend>
-    </fieldset>
-    <input type="submit" value="Votar">
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'polls/reset.css' %}">
+        <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-
-{% comment %} <h1>{{question.question_text}}</h1>
-
-<ul>
-    {% for choice in question.choice_set.all  %}
-    <li>
-        {{choice.choice_text}}
-    </li>
-    {% endfor %}
-</ul> {% endcomment %}
+        <title>{{ question.question_text}}</title>
+    </head>
+    <body>
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend>
+                    <h1>
+                        {{ question.question_text}}
+                    </h1>
+                    {% if error_mesage %}
+                        <p><strong>
+                            {{error_mesage}}
+                        </strong></p>
+                    {% endif %}
+                    {% for choice in question.choice_set.all  %}
+                        <input 
+                            type="radio"
+                            name="choice"
+                            id="choice{{forloop.counter}}" {% comment %} me dice cual es el valor del contador actual  {% endcomment %}
+                            value={{choice.id}}
+                            >
+                        <label for="choice{{forloop.counter}}">
+                            {{choice.choice_text}}
+                        </label>
+                        <br>
+                    {% endfor %}
+                </legend>
+            </fieldset>
+            <input type="submit" value="Votar">
+        </form>
+    </body>
+</html>
